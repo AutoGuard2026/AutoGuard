@@ -127,7 +127,7 @@ identifier_to_files = {}
 API_url = "https://api.xty.app/v1"  #
 
 # Your GPT-4o API Token
-token = "sk-q6ou3C0LdeNkX4aE5f96FbD7034d4e2aAcD870B8Bf5c1bF2"
+token = ""
 
 # 假设 init_evaluate_chat, check_ID 和 inference_chat 函数在其他地方定义
 def process_test_folders(results_folder):

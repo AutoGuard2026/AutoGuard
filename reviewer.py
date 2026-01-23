@@ -128,7 +128,7 @@ identifier_to_files = {}
 API_url = "https://api.xty.app/v1"
 
 # Your GPT-4o API Token
-token = "sk-oeaVkU6IdT0gDDUoB7Cc15Bd3e574a51AbFd5b77A81dD9Cd"
+token = ""
 
 
 

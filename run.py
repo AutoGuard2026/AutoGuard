@@ -90,7 +90,7 @@ match app_type: #点击链规则数量
 API_url = "https://api.xty.app/v1"
 
 # Your GPT-4o API Token
-token = "sk-oeaVkU6IdT0gDDUoB7Cc15Bd3e574a51AbFd5b77A81dD9Cd"
+token = ""
 
 # Choose between "api" and "local". api: use the qwen api. local: use the local qwen checkpoint
 caption_call_method = "api"
@@ -100,7 +100,7 @@ caption_call_method = "api"
 caption_model = "qwen-vl-plus"
 
 # If you choose the api caption call method, input your Qwen api here
-qwen_api = "sk-6470eabca2e94a97a61ba714f8cc85e1"
+qwen_api = ""
 
 # You can add operational knowledge to help Agent operate more accurately.
 add_info = "If you want to tap an icon of an app, use the action \"tap\". If you want to exit an app, use the action \"Home\"\n"

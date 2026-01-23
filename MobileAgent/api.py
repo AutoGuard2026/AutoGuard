@@ -17,7 +17,7 @@ def encode_image(image_path):
 #         # 中转的url地址
 #         base_url='https://tbnx.plus7.plus/v1',
 #         # 修改为自己生成的key
-#         api_key='sk-825rDLxxbbHPFbFbwwB9Fl5NztpvzrMkP14Ae8AbQeksSI4q'
+#         api_key=''
 #     )
 #     data = {
 #                 "messages": []
