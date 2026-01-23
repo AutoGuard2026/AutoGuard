@@ -1,5 +1,3 @@
-#final-evaluate
-#将截图文件夹移出result文件夹再修改test_name使用
 import re
 import os
 import base64
@@ -13,7 +11,6 @@ def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
 def inference_chat(chat,api_url, token):
-    #print("begin inference_chat\n")
     client = OpenAI(
         base_url=api_url,
         api_key=token,
@@ -22,13 +19,11 @@ def inference_chat(chat,api_url, token):
             follow_redirects=True,
         ),
     )
-    #print("begin data\n")
     data = {
         "messages": []
     }
     for role, content in chat:
         data["messages"].append({"role": role, "content": content})
-    #print("end data\n")
     while True:
         try:
             completion = client.chat.completions.create(
@@ -38,7 +33,6 @@ def inference_chat(chat,api_url, token):
                 temperature=0.0,
                 seed=1234
             )
-            #print("end completion")
             print(str(completion.choices[0].message.content))
             return completion.choices[0].message.content
         except:
@@ -50,17 +44,14 @@ def inference_chat(chat,api_url, token):
         else:
             break
     return 0
-
-# 添加标识符及其对应的文件名
 def add_file(identifier, file_name):
     if identifier not in identifier_to_files:
-        identifier_to_files[identifier] = []  # 创建一个新的列表
-    identifier_to_files[identifier].append(file_name)  # 将文件名添加到对应标识符的列表中
+        identifier_to_files[identifier] = []
+    identifier_to_files[identifier].append(file_name)
 
 
 def check_ID(id):
-    #根据规则ID，设置常见的case，将误报率降低
-    #已有角色设定
+
     prompt=''
     rule=""
     case=""
@@ -120,81 +111,51 @@ def init_evaluate_chat():
     operation_history.append(["system", [{"type": "text", "text": sysetm_prompt}]])
     return operation_history
 
-
-# 初始化一个字典，保存标识符与文件名的映射
-# 按照“规则-图片-图片”给出键值对
 identifier_to_files = {}
-# Your GPT-4o API URL
 API_url = "https://api.xty.app/v1"
-
-# Your GPT-4o API Token
 token = ""
-
-
-
-# 检查chat.txt找到non-compliance
 with open(f'.\\{test_name}\\chat.txt', 'r') as file:
     content = file.read()
-# if True:
-#     content="evaluate-output: Continue. \nFind non-compliance: \nPC-1 the app must not include features outside the app types intended for cars.C:\\Users\\lnx\\Desktop\\android_auto\\test\\motorist\\1743477076.2114003.png - Continue. \n"
-#     # 正则表达式提取 "evaluate" 和 "png" 之间的内容
+
+
     pattern = r'evaluate-output:(.*?)png'
     matches = re.findall(pattern, content, re.DOTALL)
     print(str(matches))
     os.system('pause')
-    # 遍历所有匹配到的内容
     for match in matches:
         match+='png'
         if 'find non-compliance' in match or 'Find non-compliance' in match:
-            # 提取标识符和文件名
             pattern2 = r'\b[A-Za-z]+-\d+\b'
             identifiers = re.findall(pattern2, match)
             filenames = re.findall(r'C:.+\.png', match)
-
-            # 将标识符和对应文件名添加到字典中
             for identifier in identifiers:
                 for filename in filenames:
                     if identifier not in identifier_to_files:
                         identifier_to_files[identifier] = []
-                    #identifier_to_files[identifier].append(filename)
                     add_file(identifier, filename)
 
 print(str(identifier_to_files))
 os.system('pause')
 
-chat_file = open(f'.\\{test_name}\\chat.txt', "a")  # 打开文件作为交互显示
-# 遍历字典中的每个标识符及其文件列表
+chat_file = open(f'.\\{test_name}\\chat.txt', "a")
+
 for identifier, file_names in identifier_to_files.items():
 
-    # 根据规则ID生成prompt描述
-    # for file_name in file_names:    #在子文件夹result中查找
-    #     file_path = os.path.join('result', file_name)
-    #     # 检查文件是否存在
-    #     if not os.path.exists(file_path):
-    #         print(f"文件{file_name} 在文件夹中未找到")
-    #     else:
-    #图片编码添加到prompt后面
-    chat_evaluate = init_evaluate_chat()  # 初始化evaluate agent，角色设定
+    chat_evaluate = init_evaluate_chat()
     prompt=check_ID(identifier)
     chat_evaluate = add_response_images("user", prompt, chat_evaluate,
-                                           file_names)  # 每次询问给出一条规则的所有报告图片
-
-    #筛选回答，得到最终结果的报告
+                                           file_names)
 
     status = "#" * 50 + " Final Evaluation " + "#" * 50
     print(status)
     print(f"规则: {identifier}")
     output_evaluate = inference_chat(chat_evaluate, API_url, token)
-    # chat_file.write("evaluate-input: "+str(chat_evaluate))
     chat_file.write(
         "final-evaluate-input: " + str(re.sub(r'\{\'type\': \'image_url\'[^}]*\}', '', str(chat_evaluate))))
     chat_file.write("final-evaluate-output: " + str(output_evaluate))
-    # evaluate = output_evaluate.split("### Thought ###")[-1].replace("\n", " ").strip()  # 从输出中提取反思部分
     print('#' * len(status))
 
     result = re.findall(r'(\d+):([^\n]+)', output_evaluate)
-
-    # 打印结果
     for item in result:
         string=f"截图: {file_names[item[0]-'1']}, 原因: {item[1]}"
         print(string)
