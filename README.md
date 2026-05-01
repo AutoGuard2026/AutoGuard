@@ -28,4 +28,4 @@ Install Android Studio and the in-vehicle emulator.
 
 Install the DHU.
 
-- Prepare a phone, install the Android Auto app, and start Developer Mode.
+Prepare a phone, install the Android Auto app, and start Developer Mode.
