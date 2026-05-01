@@ -7,3 +7,18 @@ List of all rules of Google’s Car App Quality Guidelines in AutoGuard. The spe
 ![List of all tested rules of Google’s Car App Quality Guidelines in AutoGuard.](https://github.com/AutoGuard2026/AutoGuard/blob/main/guidelines.png)
 
 <img src="https://github.com/AutoGuard2026/AutoGuard/blob/main/guidelines2.png">
+
+
+
+## setup
+
+```
+pip install -r requirements.txt
+
+```
+
+### AAOS
+
+
+
+### Android Auto
